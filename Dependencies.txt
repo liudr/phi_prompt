@@ -1,0 +1,10 @@
+This library depends on the following libraries:
+
+Official Arduino libraries:
+#include <WProgram.h>
+#include <LiquidCrystal.h>
+#include <avr/pgmspace.h>
+
+Contributed libraries from Liudr.wordpress.com
+#include <phi_buttons.h>
+#include <phi_keypads.h>
