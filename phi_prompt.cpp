@@ -1,70 +1,3 @@
-/** \file
- *  \brief     This is an official release of the phi_prompt text-based user interface library for arduino 1.0.
- *  \details   This library requires 1.0 version of phi_interfaces library.
- *  \author    Dr. John Liu
- *  \version   1.6.0.2
- *  \date      02/17/2017
- *  \pre       Compatible with Arduino IDE 1.6.
- *  \bug       Not tested on Arduino IDE higher than 1.6.0!
- *  \warning   PLEASE DO NOT REMOVE THIS COMMENT WHEN REDISTRIBUTING! No warranty!
- *  \copyright Dr. John Liu. GNU GPL V 3.0.
- *  \par Contact
- * Obtain the documentation or find details of the phi_interfaces, phi_prompt TUI library, Phi-2 shield, and Phi-panel hardware or contact Dr. Liu at:
- *
- * <a href="http://liudr.wordpress.com/phi_interfaces/">http://liudr.wordpress.com/phi_interfaces/</a>
- *
- * <a href="http://liudr.wordpress.com/phi-panel/">http://liudr.wordpress.com/phi-panel/</a>
- *
- * <a href="http://liudr.wordpress.com/phi_prompt/">http://liudr.wordpress.com/phi_prompt/</a>
- *
- * <a href="http://liudr.wordpress.com/phi-2-shield/">http://liudr.wordpress.com/phi-2-shield/</a>
- *  \par Library dependency
- * This library requires phi_interfaces library version 1.0
- *
- *  \par Update
- * 02/17/2017: Modified #include and function definitions to use LCD.h from Francisco Malpartida. Replaced LiquidCrystal with LCD.
- * 08/10/2015: Added some define keywords to remove magic numbers. 
- * 07/07/2015: Added two more glyphs, music and Lux
- * 05/28/2015: Released under GNU GPL V 3.0 Yeah!
- * 03/24/2015: Added option 2 (space padding to the left) coding to input_integer(). The option featured in documentation but was not coded till now. \n
- * 02/12/2015: Removed PROGMEM prog_char and replaced with const char PROGMEM. \n
- * 12/22/2012: Moved simple setup functions for 6 buttons, phi-2 and phi-3 shields into simple function block so they can be disabled by disable_simplefns. \n
- * 11/25/2012: Replaced max_items for simple selec list with a def simple_select_list_max_items and set it to 32. Also modified simple_input_panel to display on row=lcd_h/2 so row 1 for 2-row display or row 2 for 4-row display. \n
- * 11/24/2012: Added simple setup functions for 6 buttons, phi-2 and phi-3 shields. Corrected the sense_select_list left and right button didn't scroll column problem since a while back. \n
- * 11/19/2012: Added if-else for i/n index printing so it will stay as %2d/%2d if there are 10 or more items so if one goes from 15/15 back to 1/15, no junk will be left, like 1/155. Also updated sample code to position index according to total number of items.  \n
- * 08/18/2012: Added static variable simple_option to store required features for simple list. \n
- * Also modified the simple_select_list_[auto_scroll, scroll_bar, center_choice] functions to store required option in simple_option instead of directly altering sharedstruct.option, which gets overwritten everytime a new list is rendered. \n
- * Corrected wrong logic in simple_select_list_scroll_bar. \n
- * 03/31/2012: Added function to prepare_simple_select_list to render multi-select list. \n
- * 03/29/2012: Added several functions and restructured how select_list and text_area works. Extracted prepare and sense out of select_list and text_area and use them in both simple and non-simple version. \n
- * 03/19/2012: Changed several byte variables to int (i in simple_select_list adn get_simple_list_item, inc in long_msg_lcd and long_msg_lcd_P) to accommodate larger simple lists and longer messages. \n
- * 03/06/2012: Corrected the yn_dialog return value wrong comment. Added scroll bar and center item only for one column list to simple_select_list. \n
- * 02/18/2012: Corrected simple_select_list(). The restoring new line function was fixed. \n
- * 02/12/2012: Added simple functions simple_select_list(), simple_long_msg(), and simple_input_panel(). \n
- * 12/18/2011: Modified with #if and (uint8_t) to run on both arduino IDE 1.0 and pre-1.0 versions. \n
- * 05/23/2011: First official release of the library compatible with Arduino IDE 0022. Needs phi_buttons library as the physical layer. \n
- * \par Function keys
- * The roles of the function keys are different in different inputs.
- * \par Up
- * Scroll one line up in long message. Increment one character in place in input panel or input number. Move one item up in the select list.
- * \par Down
- * Scroll one line down in long message. Decrement one character in place in input panel or input number. Move one item down in the select list.
- * \par Left
- * Scroll one page up in long message. Move one character to the left in input panel or input number. Move one column to the left in the select list.
- * \par Right
- * Scroll one page down in long message. Move one character to the right in input panel or input number. Move one item column to the right in the select list.
- * \par Enter
- * Dismiss a long message, return 1. Submit result in input panel or input number and dismiss the input, return 1. Select the highlighted item in the select list and dismiss the list.
- * \par Escape
- * Dismiss a long message, return -1. Dismiss the input and return -1. Dismiss the list and return -1.
- * \par Other keys
- * All other keys are passed to input without change.
- * Select_list() will discard any key other than a function key.
- * Input_panel() will accept any key into its string and treats \n as Enter and \b as back space function besides treating above 6 function keys.
- * Input_number() only accepts numeric keys into its string and treats \n as Enter and \b as back space function besides treating above 6 function keys.
- * Input_integer() will only accept function keys and discards any other keys.
- * Text_area() will only accept function keys and numeric keys and discards any other keys.
- */
 /*
 .______    __    __   __        .______   .______        ______   .___  ___. .______   .___________.
 |   _  \  |  |  |  | |  |       |   _  \  |   _  \      /  __  \  |   \/   | |   _  \  |           |
@@ -1581,25 +1514,27 @@ LCD * simple_setup_phi_2(byte columns,byte rows)
  * \details Set up the library with phi-3 shield LCD and analog button pin. All pins are implied as Phi-3 shield setup
  * \return It returns the liquid crystal object address, in case you need it for future reference.
  */
-LCD * simple_setup_phi_3(byte columns,byte rows)
+ /*
+LCD * simple_setup_phi_3()
 {
-  static char up_keys[]={"U"}; ///< All keys that act as the up key are listed here.
-  static char down_keys[]={"D"}; ///< All keys that act as the down key are listed here.
-  static char left_keys[]={"L"}; ///< All keys that act as the left key are listed here.
-  static char right_keys[]={"R"}; ///< All keys that act as the right key are listed here.
-  static char enter_keys[]={"B"}; ///< All keys that act as the enter key are listed here.
-  static char escape_keys[]={"A"}; ///< All keys that act as the escape key are listed here.
-  static char * fn_keys[]={up_keys,down_keys,left_keys,right_keys,enter_keys,escape_keys}; ///< All function key names are gathered here fhr phi_prompt.
-  static byte pins[]={ A0};  ///< The digital pins for buttons
-  static int values[]={0, 417, 562, 647, 672, 709}; //These numbers need to increase monotonically.
-  static char mapping[]={'U','D','L','R','B','A'};           ///< This is a list of names for each button.
-  static phi_analog_keypads* my_btns= new phi_analog_keypads(mapping, pins, values, 1, 6);    
-  static multiple_button_input * keypads[]={my_btns, 0};
-  static LCD * lcd= new LiquidCrystal_I2C(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
-  lcd->begin(columns,rows);
-  init_phi_prompt(lcd, keypads, fn_keys, columns, rows, '~');
-}
+	const int total_buttons=6;
+	const int button_up=6;
+	const int button_down=5;
+	const int button_left=7;
+	const int button_right=4;
+	const int button_B=3;
+	const int button_A=2;
+	static byte pins[]={button_up,button_down,button_left,button_right,button_B,button_A}; // The digital pins connected to the 6 buttons.
+	phi_button_groups my_btns("UDLRBA", pins, total_buttons);
+	static char * fn_keys[]={"U","D","L","R","B","A"}; ///< All function key names are gathered here fhr phi_prompt.
+	multiple_button_input * keypads[]={&my_btns,0}; // This adds all available keypads as inputs for phi_prompt library
 
+	static multiple_button_input * keypads[]={my_btns, 0};
+	static LCD * lcd= new LiquidCrystal_I2C(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+	lcd->begin(20,4);
+	init_phi_prompt(lcd, keypads, fn_keys, 20, 4, '~');
+}
+*/
 /**
  * \details Return pointer to the lcd, stored by phi_prompt_init
  * \return It returns the liquid crystal object address.
